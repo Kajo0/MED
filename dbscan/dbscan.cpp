@@ -19,6 +19,26 @@ double euclideanDistance(const Vector& v1, const Vector& v2) {
 	return sqrt(dist);
 } 
 
+
+double cosineSimilarity(const Vector& v1, const Vector& v2) {
+	assert(v1.size() == v2.size());
+
+	double ab = 0.0, a2 = 0.0, b2= 0.0;
+	for(int i =0; i<v1.size(); i++) {
+		ab += v1[i] * v2[i];
+		a2 += v1[i] * v1[i];
+		b2 += v2[i] * v2[i];
+	}
+	a2 = sqrt(a2);
+	b2 = sqrt(b2);
+
+	return ab / (a2 * b2 + 0.000001);
+}
+
+DBScan::DBScan(const std::function<double(const Vector&, const Vector&)>& distanceFunction,
+	const std::function<bool (double dist, double eps)>& isInEps_): distance(distanceFunction), isInEps(isInEps_) {
+}
+
 std::map<int, Cluster> DBScan::dbscan(const std::vector<Vector>& points, double eps, int minPts) const {
 	std::list<SetPoint> setOfPoints;
 	for(int i=0; i< points.size(); i++) {
@@ -94,9 +114,9 @@ std::list<SetPoint*> DBScan::regionQuery(const std::list<SetPoint>& setOfPoints,
 	std::list<SetPoint*> neighbors;
 	//std::cout << "eps=" << eps << std::endl;
 	for(auto it =setOfPoints.begin(); it != setOfPoints.end(); it++) {
-		double dist = euclideanDistance(point.vector, it->vector);
-		//std::cout << "dist=" << dist << std::endl;
-		if (dist < eps) {
+		double dist = distance(point.vector,it->vector);
+		std::cout << "dist=" << dist << std::endl;
+		if (isInEps(dist, eps)) {
 			neighbors.push_back(const_cast<SetPoint*>(&(*it)));
 		}	
 	}
