@@ -1,30 +1,31 @@
 #include <vector>
+#include <map>
 #include <list>
 #include <algorithm>
 
 typedef std::vector<double> Vector;
 typedef std::vector<Vector> Cluster;
 
-
-struct PointData {
+struct SetPoint {
 	Vector vector;
 	int clusterId;
-	bool visited;
+	int index;
+
+	const static int UNCLASSIFIED;
+	const static int NOISE;
 };
 
 class DBScan {
 public:
-	DBScan(int minPts_, double eps_, const Cluster& points_);
-	std::vector<PointData> getClusters();
+	// returns map with clusters
+	// cluster with key = 0 is noise
+	std::map<int, Cluster> dbscan(const std::vector<Vector>& points, double eps, int minPts) const;
 private:
-	const int UNCLASSIFIED = -1;
-	const int NOISE = 0;
-	int clusterId;
-	int minPts;
-	double eps;
-	std::vector<PointData> points;
+	// sets clusterId for every point in set
+	// returns number of clusters
+	int dbscan(std::list<SetPoint>& setOfPoints, double eps, int minPts) const;
 
-	std::list<PointData*> regionQuery(const PointData& point);
-	bool expandCluster(PointData& point, std::list<PointData*>& seeds);
+	std::list<SetPoint*> regionQuery(const std::list<SetPoint>& setOfPoints, const SetPoint& point, double eps) const;
+	bool expandCluster(std::list<SetPoint>& setOfPoints, SetPoint& point, int clusterId, double eps, int minPts) const;
 };
 
