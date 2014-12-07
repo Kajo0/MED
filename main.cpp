@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <fstream>
 #include <stdexcept>
 #include <algorithm>
+#include <iomanip>
 
 #include "dbscan/dbscan.h"
 
@@ -44,14 +46,14 @@ Cluster readData(const std::string& filename) {
 }
 
 
-void print4dist(Cluster data) {
+void print4dist(Cluster data, const DistFunc& distFunc) {
 	std::vector<double> kdistances;
 	for(int i=0; i< data.size() ;i++) {
 		std::vector<double> distances;
 		for(int j=0; j< data.size(); j++) {
 			if (i == j)
 				continue;
-			distances.push_back(euclideanDistance(data[i], data[j]));
+			distances.push_back(distFunc(data[i], data[j]));
 		}
 		std::sort(distances.begin(), distances.end());
 		kdistances.push_back(distances[3]);
@@ -61,8 +63,8 @@ void print4dist(Cluster data) {
 	double max = *(kdistances.end() - 1);
 	
 	for(double dist : kdistances) {
-		int size = 100 * (1 - (max - dist) / (max - min));
-		std::cout << dist << "\t";
+		int size = 120 * (1 - (max - dist) / (max - min));
+		std::cout << std::setprecision(8) << dist << "\t";
 		for(int i=0; i< size; i++)
 			std::cout << "=";
 		std::cout << std::endl;
@@ -71,10 +73,10 @@ void print4dist(Cluster data) {
 
 /*
 Usage:
-argv[1] - eps
-argv[2] - minPts
-argv[3] - data file
-
+argv[1] - data file
+argv[2] - distance '-e' '-c' '-m'
+argv[3] - minPts
+argv[4] - eps
 
 */
 int main(int argc, char* argv[]) {
@@ -89,32 +91,38 @@ int main(int argc, char* argv[]) {
 	Cluster points = {p1, p2, p3, p4, r1, r2, r3, r4,
 		s1, s2, s3, s4, n1, n2, a1, a2, a3, a4, b1, b2, b3, b4};
 	*/
-	Cluster points = readData(argv[3]);
-	print4dist(points);
-	DBScan scan(euclideanDistance, [](double dist, double eps) { return dist < eps;});
-
-	auto result = scan.dbscan(points, atof(argv[1]), atoi(argv[2]));
-	for(auto& cluster : result) {
-		std::cout << "clusterId=" << cluster.first << std::endl;
-		for(auto& point : cluster.second) {
-			std::cout<< "vector:" << vectorToString(point) << std::endl;
-		}
+	Cluster points = readData(argv[1]);
+	DistFunc distFunc;
+	InEpsFunc inEpsFunc;
+	if (strcmp(argv[2], "-e") == 0) {
+		distFunc = euclideanDistance;
+		inEpsFunc = [](double dist, double eps) { return dist < eps;};
+	} else if (strcmp(argv[2], "-c") == 0) {
+		distFunc = cosineSimilarity;
+		inEpsFunc = [](double dist, double eps) { return 1.0-dist < eps;};
+	} else {
+		distFunc = manhattanDistance;
+		inEpsFunc = [](double dist, double eps) { return dist < eps;};
 	}
-	std::cout << "FINISHED euclidean" << std::endl;
 	
-	/*
-	scan = DBScan(cosineSimilarity, [](double dist, double eps) { return 1.0-dist < eps;});
+	if (argc == 3) {
+		print4dist(points, distFunc);
+	}
 
-        result = scan.dbscan(points, 0.1, 2);
-        std::cout << result.size() << std::endl;
-        for(auto& cluster : result) {
-                std::cout << "clusterId=" << cluster.first << std::endl;
-                for(auto& point : cluster.second) {
-                        std::cout<< "vector:" << vectorToString(point) << std::endl;
-                }
-        }
-        std::cout << "FINISHED cosine" << std::endl;
-        */
+	if (argc == 5) {
+		int minPts = atoi(argv[3]);
+		int eps = atof(argv[4]);
+		DBScan scan(distFunc, inEpsFunc);
+
+		auto result = scan.dbscan(points, eps, minPts);
+		for(auto& cluster : result) {
+			std::cout << "clusterId=" << cluster.first << std::endl;
+			for(auto& point : cluster.second) {
+				std::cout<< "vector:" << vectorToString(point) << std::endl;
+			}
+		}
+		std::cout << "FINISHED" << std::endl;
+	}
 	return 0;
 
 }

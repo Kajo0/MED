@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <map>
 #include <list>
@@ -6,9 +8,12 @@
 
 typedef std::vector<double> Vector;
 typedef std::vector<Vector> Cluster;
+typedef std::function<double (const Vector&, const Vector&)> DistFunc;
+typedef std::function<bool (double, double)> InEpsFunc;
 
 double euclideanDistance(const Vector& v1, const Vector& v2);
 double cosineSimilarity(const Vector& v1, const Vector& v2);
+double manhattanDistance(const Vector& v1, const Vector& v2);
 
 struct SetPoint {
 	Vector vector;

@@ -25,7 +25,8 @@ double cosineSimilarity(const Vector& v1, const Vector& v2) {
 	assert(v1.size() == v2.size());
 
 	double ab = 0.0, a2 = 0.0, b2= 0.0;
-	for(int i =0; i<v1.size(); i++) {
+	// FIXME first attribute is class
+	for(int i =1; i<v1.size(); i++) {
 		ab += v1[i] * v2[i];
 		a2 += v1[i] * v1[i];
 		b2 += v2[i] * v2[i];
@@ -34,6 +35,18 @@ double cosineSimilarity(const Vector& v1, const Vector& v2) {
 	b2 = sqrt(b2);
 
 	return ab / (a2 * b2 + 0.000001);
+}
+
+double manhattanDistance(const Vector& v1, const Vector& v2) {
+	assert(v1.size() == v2.size());
+
+	double dist = 0.0;
+	// FIXME first attribute is class
+	for(int i=1; i< v1.size(); i++) {
+		dist += abs(v1[i] - v2[i]);
+	}
+
+	return dist;
 }
 
 DBScan::DBScan(const std::function<double(const Vector&, const Vector&)>& distanceFunction,
