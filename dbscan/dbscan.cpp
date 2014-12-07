@@ -12,7 +12,8 @@ double euclideanDistance(const Vector& v1, const Vector& v2) {
 	assert(v1.size() == v2.size());
 	
 	double dist = 0.0;
-	for(int i=0; i<v1.size(); i++) {
+	// FIXME first attribute is class
+	for(int i=1; i<v1.size(); i++) {
 		dist += ((v1[i] - v2[i]) * (v1[i] - v2[i]));
 	}
 	
@@ -115,7 +116,7 @@ std::list<SetPoint*> DBScan::regionQuery(const std::list<SetPoint>& setOfPoints,
 	//std::cout << "eps=" << eps << std::endl;
 	for(auto it =setOfPoints.begin(); it != setOfPoints.end(); it++) {
 		double dist = distance(point.vector,it->vector);
-		std::cout << "dist=" << dist << std::endl;
+		//std::cout << "dist=" << dist << std::endl;
 		if (isInEps(dist, eps)) {
 			neighbors.push_back(const_cast<SetPoint*>(&(*it)));
 		}	
