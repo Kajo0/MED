@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+Debug
+.cproject
+.project
+.settings
+app
