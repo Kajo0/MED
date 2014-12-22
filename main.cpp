@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 				{ "file", required_argument, 0, 'f' },
 				{ 0, 0, 0, 0 } };
 		int option_index = 0;
-		c = getopt_long(argc, argv, "dknutecm:s:p:l:g:i:f:", long_options,
+		c = getopt_long(argc, argv, "dknutecms:p:l:g:i:f:", long_options,
 				&option_index);
 
 		if (c == -1) {
