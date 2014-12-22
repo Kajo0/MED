@@ -1,5 +1,3 @@
-#include "util.h"
-
 #include <iostream>
 #include <cassert>
 #include <string>
@@ -8,6 +6,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <iomanip>
+#include "util.h"
+using namespace std;
 
 namespace med {
 
@@ -48,10 +48,10 @@ double manhattanDistance(const Vector& v1, const Vector& v2) {
 	return dist;
 }
 
-std::string vectorToString(const std::vector<double>& vector) {
-	std::string result = "[";
+string vectorToString(const vector<double>& vector) {
+	string result = "[";
 	for (int i = 0; i < vector.size(); i++) {
-		result += std::to_string(vector[i]);
+		result += to_string(vector[i]);
 		if (i != vector.size() - 1)
 			result += ",";
 	}
@@ -59,15 +59,15 @@ std::string vectorToString(const std::vector<double>& vector) {
 	return result;
 }
 
-Cluster readData(const std::string& filename) {
-	std::ifstream input(filename);
+Cluster readData(const string& filename) {
+	ifstream input(filename);
 	if (!input.is_open()) {
-		throw std::runtime_error(std::string("Cannot read data file!"));
+		throw runtime_error(string("Cannot read data file!"));
 	}
 	int count = 0, size = 0;
 	input >> count;
 	input >> size;
-	std::cout << "Count= " << count << " size= " << size << std::endl;
+	cout << "Count= " << count << " size= " << size << endl;
 	Cluster result;
 	for (int i = 0; i < count; i++) {
 		Vector vector;
@@ -81,32 +81,64 @@ Cluster readData(const std::string& filename) {
 		}
 		result.push_back(vector);
 	}
-	std::cout << "Read data completed!" << std::endl;
+	cout << "Read data completed!" << endl;
 	return result;
 }
 
 void print4dist(Cluster data, const DistFunc& distFunc) {
-	std::vector<double> kdistances;
+	vector<double> kdistances;
 	for (int i = 0; i < data.size(); i++) {
-		std::vector<double> distances;
+		vector<double> distances;
 		for (int j = 0; j < data.size(); j++) {
 			if (i == j)
 				continue;
 			distances.push_back(distFunc(data[i], data[j]));
 		}
-		std::sort(distances.begin(), distances.end());
+		sort(distances.begin(), distances.end());
 		kdistances.push_back(distances[3]);
 	}
-	std::sort(kdistances.begin(), kdistances.end());
+	sort(kdistances.begin(), kdistances.end());
 	double min = *(kdistances.begin());
 	double max = *(kdistances.end() - 1);
 
 	for (double dist : kdistances) {
 		int size = 120 * (1 - (max - dist) / (max - min));
-		std::cout << std::setprecision(8) << dist << "\t";
+		cout << setprecision(8) << dist << "\t";
 		for (int i = 0; i < size; i++)
-			std::cout << "=";
-		std::cout << std::endl;
+			cout << "=";
+		cout << endl;
+	}
+}
+
+void printClusters(const map<int, Cluster> clusters) {
+	for (auto& cluster : clusters) {
+		cout << "clusterId=" << cluster.first << " (size="
+				<< cluster.second.size() << ")" << endl;
+		for (auto& point : cluster.second) {
+			cout << "\tvector: " << vectorToString(point) << endl;
+		}
+	}
+}
+
+void print2DimTableClusters(const map<int, Cluster> clusters) {
+	int maxSize = 0;
+	for (auto& cl : clusters) {
+		if (maxSize < cl.second.size()) {
+			maxSize = cl.second.size();
+		}
+	}
+
+	for (int j = 0; j < maxSize; ++j) {
+		for (auto& cluster : clusters) {
+			if (j < cluster.second.size()) {
+				assert(cluster.second[j].size() == 2);
+				cout << cluster.second[j][0] << "\t" << cluster.second[j][1]
+						<< "\t";
+			} else {
+				cout << "\t\t";
+			}
+		}
+		cout << endl;
 	}
 }
 

@@ -1,7 +1,6 @@
 #include "dbscan.h"
 
 #include <iostream>
-#include <cassert>
 #include <cmath>
 
 namespace med {
