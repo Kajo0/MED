@@ -1,10 +1,10 @@
+#include "kmeans.h"
 #include <iostream>
 #include <cassert>
 #include <cmath>
 #include <ctime>
 #include <algorithm>
 #include <limits>
-#include "kmeans.h"
 using namespace std;
 
 namespace med {

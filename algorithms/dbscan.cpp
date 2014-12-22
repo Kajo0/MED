@@ -1,5 +1,4 @@
 #include "dbscan.h"
-
 #include <iostream>
 #include <cmath>
 

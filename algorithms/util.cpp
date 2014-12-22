@@ -1,3 +1,4 @@
+#include "util.h"
 #include <iostream>
 #include <cassert>
 #include <string>
@@ -6,7 +7,6 @@
 #include <fstream>
 #include <stdexcept>
 #include <iomanip>
-#include "util.h"
 using namespace std;
 
 namespace med {

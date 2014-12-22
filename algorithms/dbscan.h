@@ -6,7 +6,6 @@
 #include <list>
 #include <algorithm>
 #include <functional>
-
 #include "util.h"
 
 namespace med {

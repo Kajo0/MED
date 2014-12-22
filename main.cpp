@@ -4,9 +4,9 @@
 #include <cstring>
 #include <cassert>
 #include <getopt.h>
-#include "dbscan/dbscan.h"
-#include "dbscan/kmeans.h"
-#include "dbscan/util.h"
+#include "algorithms/dbscan.h"
+#include "algorithms/kmeans.h"
+#include "algorithms/util.h"
 using namespace std;
 using namespace med;
 
