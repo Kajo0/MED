@@ -101,12 +101,9 @@ void print4dist(Cluster data, const DistFunc& distFunc) {
 	double min = *(kdistances.begin());
 	double max = *(kdistances.end() - 1);
 
+	ofstream csvFile("4dist.csv");
 	for (double dist : kdistances) {
-		int size = 120 * (1 - (max - dist) / (max - min));
-		cout << left << setw(17) << setprecision(8) << dist << " ";
-		for (int i = 0; i < size; i++)
-			cout << "=";
-		cout << endl;
+		csvFile << dist << std::endl;
 	}
 }
 

@@ -1,0 +1,19 @@
+# Komendy do wygenerowania danych testowych w formacie tekstowym
+# trzeba je skopiować do octave, a potem skasowac metadane z poczatku pliku
+
+[tvec tlab tstv tstl] = readSets();
+
+# Załadowanie zbiorów danych MNIST
+[tvec tlab tstv tstl] = readSets(); 
+
+# Policzenie transformacji do przestrzeni PCA (20-wymiarowej) 
+[mu trmx] = prepTransform(tvec, 20);
+
+# Zbiory uczący i testowy do przestrzeni PCA
+tvec = pcaTransform(tvec, mu, trmx);
+tstv = pcaTransform(tstv, mu, trmx);
+
+save tvec.txt tvec
+save tlab.txt tlab
+save tstv.txt tstv
+save tstl.txt tstl

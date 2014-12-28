@@ -22,7 +22,7 @@ void usage() {
 	cout << "-g, --groups\tGrups amount (0; ~)" << endl;
 	cout << "-l, --epsilon\tEpsilon parameter [0; ~)" << endl;
 	cout << "-i, --iterations\tMax iterations [1; ~)" << endl;
-	cout << "-n, --print4dist\tPrint 4dist" << endl;
+	cout << "-n, --print4dist\tSave 4dist to 4dist.csv" << endl;
 	cout << "-u, --debug\tDebug on" << endl;
 	cout << "-t, --test\tRun with test data" << endl;
 	cout << "-o, --dim2result\tSave 2dim data to file" << endl;
