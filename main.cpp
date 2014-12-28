@@ -30,7 +30,7 @@ void usage() {
 	cout << "\t./app -ukte -g 5 -i 100" << endl;
 	cout << "\t./app -kte -g 5 -i 100 -o test/2dim/dim2result.data" << endl;
 	cout << "\t./app -dte -s 2 -p 2" << endl;
-	cout << "\t./app -den -f wine.data" << endl;
+	cout << "\t./app -den -f test/data/wine.data" << endl;
 	cout << "\t./app -de -s 5 -p 48 -f test/data/wine.data" << endl;
 }
 

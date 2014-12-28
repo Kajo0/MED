@@ -103,7 +103,7 @@ void print4dist(Cluster data, const DistFunc& distFunc) {
 
 	for (double dist : kdistances) {
 		int size = 120 * (1 - (max - dist) / (max - min));
-		cout << setprecision(8) << dist << "\t";
+		cout << left << setw(17) << setprecision(8) << dist << " ";
 		for (int i = 0; i < size; i++)
 			cout << "=";
 		cout << endl;
@@ -114,9 +114,9 @@ void printClusters(const map<int, Cluster> clusters) {
 	for (auto& cluster : clusters) {
 		cout << "clusterId=" << cluster.first << " (size="
 				<< cluster.second.size() << ")" << endl;
-		for (auto& point : cluster.second) {
-			cout << "\tvector: " << vectorToString(point) << endl;
-		}
+//		for (auto& point : cluster.second) {
+//			cout << "\tvector: " << vectorToString(point) << endl;
+//		}
 	}
 }
 
