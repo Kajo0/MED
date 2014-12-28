@@ -16,4 +16,4 @@ More examples
 
 #For R plot `Rscript` required
 
-    sudo apt-get install R
+    sudo apt-get install r-base
