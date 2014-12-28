@@ -142,4 +142,37 @@ void print2DimTableClusters(const map<int, Cluster> clusters) {
 	}
 }
 
+void print2DimVectorsForRClusters(const std::map<int, Cluster> clusters,
+		char *resultFile) {
+	ostream *out = &cout;
+	if (resultFile) {
+		ofstream *fout = new ofstream();
+		fout->open(resultFile, ios_base::in | ios_base::trunc);
+		if (fout->is_open()) {
+			out = fout;
+		} else {
+			cout << "Error while opening '" << resultFile
+					<< "' file, so print to stdout" << endl;
+		}
+	}
+
+	for (auto& cl : clusters) {
+		for (int i = 0; i < 2; ++i) {
+			for (auto& cluster : cl.second) {
+				assert(cluster.size() == 2);
+				*out << cluster[i] << "\t";
+			}
+			*out << std::endl;
+		}
+	}
+
+	if (resultFile) {
+		try {
+			dynamic_cast<std::ofstream&>(*out).close();
+			delete out;
+		} catch (std::exception &) {
+		}
+	}
+}
+
 }

@@ -21,8 +21,10 @@ void print4dist(Cluster data, const DistFunc& distFunc);
 void printClusters(const std::map<int, Cluster> clusters);
 /**
  * Print pseudo table for 2-dimensional data
+ * @deprecated
  */
 void print2DimTableClusters(const std::map<int, Cluster> clusters);
+void print2DimVectorsForRClusters(const std::map<int, Cluster> clusters, char *resultFile);
 
 }
 

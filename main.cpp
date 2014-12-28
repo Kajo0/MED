@@ -25,11 +25,13 @@ void usage() {
 	cout << "-n, --print4dist\tPrint 4dist" << endl;
 	cout << "-u, --debug\tDebug on" << endl;
 	cout << "-t, --test\tRun with test data" << endl;
+	cout << "-o, --dim2result\tSave 2dim data to file" << endl;
 	cout << endl << "expamples:" << endl;
 	cout << "\t./app -ukte -g 5 -i 100" << endl;
+	cout << "\t./app -kte -g 5 -i 100 -o test/2dim/dim2result.data" << endl;
 	cout << "\t./app -dte -s 2 -p 2" << endl;
 	cout << "\t./app -den -f wine.data" << endl;
-	cout << "\t./app -de -s 5 -p 48 -f wine.data" << endl;
+	cout << "\t./app -de -s 5 -p 48 -f test/data/wine.data" << endl;
 }
 
 vector<Vector> testData() {
@@ -48,6 +50,7 @@ vector<Vector> testData() {
 
 int main(int argc, char* argv[]) {
 	char *file;
+	char *dim2Result = 0;
 	int minPts = 0;
 	double eps = 0;
 	double epsilon = 0;
@@ -69,23 +72,24 @@ int main(int argc, char* argv[]) {
 
 	while (1) {
 		static struct option long_options[] = {
-				{ "dbscan", no_argument, 0, 'd' },
-				{ "kmeans", no_argument, 0, 'k' },
-				{ "print4dist", no_argument, 0, 'n' },
-				{ "debug", no_argument, 0, 'u' },
-				{ "test", no_argument, 0, 't' },
-				{ "euclidean", no_argument, 0, 'e' },
-				{ "cosine", no_argument, 0, 'c' },
-				{ "manhattan", no_argument, 0, 'm' },
-				{ "minPts", required_argument, 0, 's' },
-				{ "eps", required_argument, 0, 'p' },
-				{ "epsilon", required_argument, 0, 'l' },
-				{ "groups", required_argument, 0, 'g' },
-				{ "iterations", required_argument, 0, 'i' },
-				{ "file", required_argument, 0, 'f' },
+				{ "dbscan",			no_argument,		0,	'd' },
+				{ "kmeans",			no_argument,		0,	'k' },
+				{ "print4dist",		no_argument,		0,	'n' },
+				{ "debug",			no_argument,		0,	'u' },
+				{ "test",			no_argument,		0,	't' },
+				{ "euclidean",		no_argument,		0,	'e' },
+				{ "cosine",			no_argument,		0,	'c' },
+				{ "manhattan",		no_argument,		0,	'm' },
+				{ "minPts",			required_argument,	0,	's' },
+				{ "eps",			required_argument,	0,	'p' },
+				{ "epsilon",		required_argument,	0,	'l' },
+				{ "groups",			required_argument,	0,	'g' },
+				{ "iterations",		required_argument,	0,	'i' },
+				{ "file",			required_argument,	0,	'f' },
+				{ "dim2result",		required_argument,	0,	'o' },
 				{ 0, 0, 0, 0 } };
 		int option_index = 0;
-		c = getopt_long(argc, argv, "dknutecms:p:l:g:i:f:", long_options,
+		c = getopt_long(argc, argv, "dknutecms:p:l:g:i:f:o:", long_options,
 				&option_index);
 
 		if (c == -1) {
@@ -153,6 +157,11 @@ int main(int argc, char* argv[]) {
 			file = optarg;
 			cout << "Data file='" << file << "'" << endl;
 			break;
+		case 'o':
+			dim2Result = optarg;
+			cout << "2 dimension test result file='" << dim2Result << "'"
+					<< endl;
+			break;
 
 		default:
 			usage();
@@ -207,6 +216,10 @@ int main(int argc, char* argv[]) {
 			DBScan scan(distanceFunction, inEpsFunction);
 			auto result = scan.dbscan(points, eps, minPts);
 			printClusters(result);
+
+			if (debug || dim2Result) {
+				print2DimVectorsForRClusters(result, dim2Result);
+			}
 		}
 	}
 		break;
@@ -232,10 +245,8 @@ int main(int argc, char* argv[]) {
 		cout << endl;
 		printClusters(result);
 
-		if (debug) {
-			cout << endl;
-			print2DimTableClusters(result);
-			cout << endl;
+		if (debug || dim2Result) {
+			print2DimVectorsForRClusters(result, dim2Result);
 		}
 	}
 		break;
