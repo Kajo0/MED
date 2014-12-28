@@ -18,7 +18,7 @@ double manhattanDistance(const Vector& v1, const Vector& v2);
 
 std::string vectorToString(const std::vector<double>& vector);
 Cluster readData(const std::string& filename);
-void print4dist(Cluster data, const DistFunc& distFunc);
+void print4dist(Cluster data, const DistFunc& distFunc, const std::string& out4distFile);
 void printClusters(const std::map<int, Cluster> clusters);
 /**
  * Print pseudo table for 2-dimensional data

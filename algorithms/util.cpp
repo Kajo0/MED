@@ -85,7 +85,7 @@ Cluster readData(const string& filename) {
 	return result;
 }
 
-void print4dist(Cluster data, const DistFunc& distFunc) {
+void print4dist(Cluster data, const DistFunc& distFunc, const std::string& out4distFile) {
 	vector<double> kdistances;
 	for (int i = 0; i < data.size(); i++) {
 		vector<double> distances;
@@ -101,9 +101,9 @@ void print4dist(Cluster data, const DistFunc& distFunc) {
 	double min = *(kdistances.begin());
 	double max = *(kdistances.end() - 1);
 
-	ofstream csvFile("4dist.csv");
+	ofstream outFile(out4distFile);
 	for (double dist : kdistances) {
-		csvFile << dist << std::endl;
+		outFile << dist << std::endl;
 	}
 }
 

@@ -22,7 +22,7 @@ void usage() {
 	cout << "-g, --groups\tGrups amount (0; ~)" << endl;
 	cout << "-l, --epsilon\tEpsilon parameter [0; ~)" << endl;
 	cout << "-i, --iterations\tMax iterations [1; ~)" << endl;
-	cout << "-n, --print4dist\tSave 4dist to 4dist.csv" << endl;
+	cout << "-n, --print4dist\tSave 4dist to file" << endl;
 	cout << "-u, --debug\tDebug on" << endl;
 	cout << "-t, --test\tRun with test data" << endl;
 	cout << "-o, --dim2result\tSave 2dim data to file" << endl;
@@ -50,6 +50,7 @@ vector<Vector> testData() {
 
 int main(int argc, char* argv[]) {
 	char *file;
+	char *out4distFile = 0;
 	char *dim2Result = 0;
 	int minPts = 0;
 	double eps = 0;
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]) {
 		static struct option long_options[] = {
 				{ "dbscan",			no_argument,		0,	'd' },
 				{ "kmeans",			no_argument,		0,	'k' },
-				{ "print4dist",		no_argument,		0,	'n' },
+				{ "print4dist",		required_argument,		0,	'n' },
 				{ "debug",			no_argument,		0,	'u' },
 				{ "test",			no_argument,		0,	't' },
 				{ "euclidean",		no_argument,		0,	'e' },
@@ -89,7 +90,7 @@ int main(int argc, char* argv[]) {
 				{ "dim2result",		required_argument,	0,	'o' },
 				{ 0, 0, 0, 0 } };
 		int option_index = 0;
-		c = getopt_long(argc, argv, "dknutecms:p:l:g:i:f:o:", long_options,
+		c = getopt_long(argc, argv, "dkutecmn:s:p:l:g:i:f:o:", long_options,
 				&option_index);
 
 		if (c == -1) {
@@ -122,6 +123,7 @@ int main(int argc, char* argv[]) {
 			cout << "Manhattan distance" << endl;
 			break;
 		case 'n':
+			out4distFile = optarg;
 			print4distFlag = true;
 			cout << "Print 4dist 'chart'" << endl;
 			break;
@@ -178,7 +180,7 @@ int main(int argc, char* argv[]) {
 			points = readData(file);
 		} else {
 			input.close();
-			cout << "\tBad path to file!" << endl;
+			cout << "\tBad path to file! " << endl;
 			usage();
 			return 1;
 		}
@@ -193,7 +195,12 @@ int main(int argc, char* argv[]) {
 				return 1;
 			}
 
-			print4dist(points, distanceFunction);
+			if (out4distFile == 0) {
+				cout << "\tNo out file for 4dist data!" << endl;
+				usage();
+				return 1;
+			}
+			print4dist(points, distanceFunction, out4distFile);
 		} else {
 			bool cancel = false;
 			if (minPts < 1) {
