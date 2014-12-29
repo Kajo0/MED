@@ -91,6 +91,7 @@ Cluster readData(const string& filename) {
 void print4dist(Cluster data, const DistFunc& distFunc,
 		const std::string& out4distFile) {
 	vector<double> kdistances;
+	char progress[32];
 	for (int i = 0; i < data.size(); i++) {
 		vector<double> distances;
 		for (int j = 0; j < data.size(); j++) {
@@ -100,6 +101,8 @@ void print4dist(Cluster data, const DistFunc& distFunc,
 		}
 		sort(distances.begin(), distances.end());
 		kdistances.push_back(distances[3]);
+		sprintf(progress, "\r%3.2f%%", (double)(i)/data.size()*100);
+		cout << progress;	
 	}
 	sort(kdistances.begin(), kdistances.end());
 	double min = *(kdistances.begin());
