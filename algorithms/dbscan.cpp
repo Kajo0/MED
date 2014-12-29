@@ -7,9 +7,7 @@ namespace med {
 const int SetPoint::NOISE = 0;
 const int SetPoint::UNCLASSIFIED = -1;
 
-DBScan::DBScan(
-		const std::function<double(const Vector&, const Vector&)>& distanceFunction,
-		const std::function<bool(double dist, double eps)>& isInEps_) :
+DBScan::DBScan(const DistFunc& distanceFunction, const InEpsFunc& isInEps_) :
 		distance(distanceFunction), isInEps(isInEps_) {
 }
 
@@ -94,7 +92,7 @@ std::list<SetPoint*> DBScan::regionQuery(const std::list<SetPoint>& setOfPoints,
 	std::list<SetPoint*> neighbors;
 	//std::cout << "eps=" << eps << std::endl;
 	for (auto it = setOfPoints.begin(); it != setOfPoints.end(); it++) {
-		double dist = distance(point.vector, it->vector);
+		double dist = distance(point.vector, it->vector, true);
 		//std::cout << "dist=" << dist << std::endl;
 		if (isInEps(dist, eps)) {
 			neighbors.push_back(const_cast<SetPoint*>(&(*it)));

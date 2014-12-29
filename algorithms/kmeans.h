@@ -18,7 +18,7 @@ private:
 	bool debug_;
 
 public:
-	Kmeans(const DistFunc distFunc);
+	Kmeans(const DistFunc &distFunc);
 	std::map<int, Cluster> process(const std::vector<Vector>& points,
 			int groups, float epsilon = 0, int iterations = -1) const;
 	void debug(bool enable) {

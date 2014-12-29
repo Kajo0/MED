@@ -16,22 +16,25 @@ void usage() {
 	cout << "-e, --euclidean\tEuclidean distance" << endl;
 	cout << "-c, --cosine\tCosine distance" << endl;
 	cout << "-m, --manhattan\tManhattan distance" << endl;
-	cout << "-f, --file\tPath to file withh data" << endl;
+	cout << "-f, --file\tPath to file with data" << endl;
+	cout << "-r, --result\tPath to file with results (rowId, groupId)" << endl;
 	cout << "-p, --eps\tEps parameter (0; ~)" << endl;
 	cout << "-s, --minPts\tMinPts parameter [0; ~)" << endl;
 	cout << "-g, --groups\tGrups amount (0; ~)" << endl;
 	cout << "-l, --epsilon\tEpsilon parameter [0; ~)" << endl;
 	cout << "-i, --iterations\tMax iterations [1; ~)" << endl;
-	cout << "-n, --print4dist\tSave 4dist to file" << endl;
+	cout << "-n, --print4dist\tPath to where save 4dist to file" << endl;
 	cout << "-u, --debug\tDebug on" << endl;
 	cout << "-t, --test\tRun with test data" << endl;
 	cout << "-o, --dim2result\tSave 2dim data to file" << endl;
 	cout << endl << "expamples:" << endl;
 	cout << "\t./app -ukte -g 5 -i 100" << endl;
 	cout << "\t./app -kte -g 5 -i 100 -o test/2dim/dim2result.data" << endl;
+	cout << "\t./app -kte -g 5 -i 100 -r test/rand/resLabels.data" << endl;
 	cout << "\t./app -dte -s 2 -p 2" << endl;
 	cout << "\t./app -den -f test/data/wine.data" << endl;
 	cout << "\t./app -de -s 5 -p 48 -f test/data/wine.data" << endl;
+	cout << "\t./app -de -s 5 -p 48 -f test/data/wine.data -r test/rand/resLabels.data" << endl;
 }
 
 vector<Vector> testData() {
@@ -49,9 +52,10 @@ vector<Vector> testData() {
 }
 
 int main(int argc, char* argv[]) {
-	char *file;
+	char *file = 0;
 	char *out4distFile = 0;
 	char *dim2Result = 0;
+	char *resultFile = 0;
 	int minPts = 0;
 	double eps = 0;
 	double epsilon = 0;
@@ -75,7 +79,7 @@ int main(int argc, char* argv[]) {
 		static struct option long_options[] = {
 				{ "dbscan",			no_argument,		0,	'd' },
 				{ "kmeans",			no_argument,		0,	'k' },
-				{ "print4dist",		required_argument,		0,	'n' },
+				{ "print4dist",		required_argument,	0,	'n' },
 				{ "debug",			no_argument,		0,	'u' },
 				{ "test",			no_argument,		0,	't' },
 				{ "euclidean",		no_argument,		0,	'e' },
@@ -88,9 +92,10 @@ int main(int argc, char* argv[]) {
 				{ "iterations",		required_argument,	0,	'i' },
 				{ "file",			required_argument,	0,	'f' },
 				{ "dim2result",		required_argument,	0,	'o' },
+				{ "result",			required_argument,	0,	'r' },
 				{ 0, 0, 0, 0 } };
 		int option_index = 0;
-		c = getopt_long(argc, argv, "dkutecmn:s:p:l:g:i:f:o:", long_options,
+		c = getopt_long(argc, argv, "dkutecmn:s:p:l:g:i:f:o:r:", long_options,
 				&option_index);
 
 		if (c == -1) {
@@ -159,6 +164,10 @@ int main(int argc, char* argv[]) {
 			file = optarg;
 			cout << "Data file='" << file << "'" << endl;
 			break;
+		case 'r':
+			resultFile = optarg;
+			cout << "Print result to file='" << resultFile << "'" << endl;
+			break;
 		case 'o':
 			dim2Result = optarg;
 			cout << "2 dimension test result file='" << dim2Result << "'"
@@ -173,6 +182,10 @@ int main(int argc, char* argv[]) {
 
 	if (test) {
 		points = testData();
+		int i = 0;
+		for (auto &v : points) {
+			v.insert(v.begin(), i++);
+		}
 	} else {
 		ifstream input(file);
 		if (input) {
@@ -224,6 +237,10 @@ int main(int argc, char* argv[]) {
 			auto result = scan.dbscan(points, eps, minPts);
 			printClusters(result);
 
+			if (resultFile) {
+				printResultClusters(result, resultFile);
+			}
+
 			if (debug || dim2Result) {
 				print2DimVectorsForRClusters(result, dim2Result);
 			}
@@ -248,9 +265,11 @@ int main(int argc, char* argv[]) {
 		Kmeans kmeans(distanceFunction);
 		kmeans.debug(debug);
 		auto result = kmeans.process(points, groups, epsilon, iterations);
-
-		cout << endl;
 		printClusters(result);
+
+		if (resultFile) {
+			printResultClusters(result, resultFile);
+		}
 
 		if (debug || dim2Result) {
 			print2DimVectorsForRClusters(result, dim2Result);

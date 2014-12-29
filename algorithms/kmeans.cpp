@@ -9,7 +9,7 @@ using namespace std;
 
 namespace med {
 
-Kmeans::Kmeans(const DistFunc distFunc) :
+Kmeans::Kmeans(const DistFunc &distFunc) :
 		distFunc_(distFunc), debug_(false) {
 }
 
@@ -99,7 +99,7 @@ void Kmeans::assignPoints(vector<KmeansCluster>& clusters,
 		double minDistance = numeric_limits<double>::max();
 		int clu = -1;
 		for (int c = 0; c < clusters.size(); ++c) {
-			double distance = distFunc_(clusters[c].centroid_, point);
+			double distance = distFunc_(clusters[c].centroid_, point, true);
 			if (distance < minDistance) {
 				minDistance = distance;
 				clu = c;
@@ -160,7 +160,7 @@ double Kmeans::calculateQuantizationError(
 	for (auto& cluster : clusters) {
 		points += cluster.cluster_.size();
 		for (auto& point : cluster.cluster_) {
-			result += distFunc_(point, cluster.centroid_);
+			result += distFunc_(point, cluster.centroid_, true);
 		}
 	}
 	result /= points;
