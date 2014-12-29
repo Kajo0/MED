@@ -35,7 +35,8 @@ std::map<int, Cluster> Kmeans::process(const std::vector<Vector>& points,
 	assignPoints(clusters, points);
 
 	double error = numeric_limits<double>::max();
-	for (int iteration = 0; iteration != iterations; ++iteration) {
+	int iteration;
+	for (iteration = 0; iteration != iterations; ++iteration) {
 		recalculateCentroids(clusters);
 		if (!reassignPoints(clusters)) {
 			if (debug_) {
@@ -61,9 +62,13 @@ std::map<int, Cluster> Kmeans::process(const std::vector<Vector>& points,
 		}
 
 		if (qError < epsilon) {
+			cout << "Finish by qError < epsilon (" << qError << " < " << epsilon
+					<< ")" << endl;
 			break;
 		}
 	}
+	cout << "Finished after " << iteration << " of " << iterations
+			<< " with epsilonError=" << error << endl;
 
 	map<int, Cluster> result;
 	int id = 1;
