@@ -17,7 +17,7 @@ void usage() {
 	cout << "-c, --cosine\tCosine distance" << endl;
 	cout << "-m, --manhattan\tManhattan distance" << endl;
 	cout << "-f, --file\tPath to file with data" << endl;
-	cout << "-r, --result\tPath to file with results (rowId, groupId)" << endl;
+	cout << "-r, --result\tPath to file with results (groupId)" << endl;
 	cout << "-p, --eps\tEps parameter (0; ~)" << endl;
 	cout << "-s, --minPts\tMinPts parameter [0; ~)" << endl;
 	cout << "-g, --groups\tGrups amount (0; ~)" << endl;
