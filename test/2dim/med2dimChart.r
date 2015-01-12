@@ -24,7 +24,7 @@ med <- function(filename="dim2result.data") {
 	plot(0, 0, xlim=xRange, ylim=yRange, type="n")
 	cl <- rainbow(seriesAmount);
 
-	for (i in 1:seriesAmount){
+	for (i in 1:seriesAmount) {
 		points(xVec[[i]], yVec[[i]], col=cl[i], pch=(i+3)%%26)
 	}
 
