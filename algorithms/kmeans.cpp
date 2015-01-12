@@ -81,8 +81,10 @@ std::map<int, Cluster> Kmeans::process(const std::vector<Vector>& points,
 
 vector<Vector> Kmeans::findRandomCentroids(const vector<Vector>& points,
 		int groups) const {
+	timespec ts;
+	clock_gettime(CLOCK_REALTIME, &ts);
+	srand(ts.tv_nsec);
 	// TODO optimize it
-	srand(unsigned(time(0)));
 	vector<int> randomInc;
 	for (int i = 0; i < points.size(); ++i) {
 		randomInc.push_back(i);
