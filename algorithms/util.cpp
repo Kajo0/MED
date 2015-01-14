@@ -36,7 +36,7 @@ double cosineSimilarity(const Vector& v1, const Vector& v2, bool ommitFirst) {
 	a2 = sqrt(a2);
 	b2 = sqrt(b2);
 
-	return 1 - ab / (a2 * b2 + 0.000001);
+	return ab / (a2 * b2 + 0.000001);
 }
 
 double manhattanDistance(const Vector& v1, const Vector& v2, bool ommitFirst) {
