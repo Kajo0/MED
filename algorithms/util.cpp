@@ -24,7 +24,7 @@ double euclideanDistance(const Vector& v1, const Vector& v2, bool ommitFirst) {
 	return sqrt(dist);
 }
 
-double cosineSimilarity(const Vector& v1, const Vector& v2, bool ommitFirst) {
+double cosineDistance(const Vector& v1, const Vector& v2, bool ommitFirst) {
 	assert(v1.size() == v2.size());
 
 	double ab = 0.0, a2 = 0.0, b2 = 0.0;
@@ -36,7 +36,7 @@ double cosineSimilarity(const Vector& v1, const Vector& v2, bool ommitFirst) {
 	a2 = sqrt(a2);
 	b2 = sqrt(b2);
 
-	return ab / (a2 * b2 + 0.000001);
+	return 1.0 - (ab / (a2 * b2 + 0.000001));
 }
 
 double manhattanDistance(const Vector& v1, const Vector& v2, bool ommitFirst) {

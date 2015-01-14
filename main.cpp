@@ -117,9 +117,9 @@ int main(int argc, char* argv[]) {
 			cout << "Euclidean distance" << endl;
 			break;
 		case 'c':
-			distanceFunction = cosineSimilarity;
+			distanceFunction = cosineDistance;
 			inEpsFunction =
-					[](double dist, double eps) {return 1.0-dist < eps;};
+					[](double dist, double eps) {return dist < eps;};
 			cout << "Cosine metrics" << endl;
 			break;
 		case 'm':

@@ -13,7 +13,7 @@ typedef std::vector<Vector> Cluster;
 typedef std::function<double(const Vector&, const Vector&, bool)> DistFunc;
 
 double euclideanDistance(const Vector& v1, const Vector& v2, bool ommitFirst);
-double cosineSimilarity(const Vector& v1, const Vector& v2, bool ommitFirst);
+double cosineDistance(const Vector& v1, const Vector& v2, bool ommitFirst);
 double manhattanDistance(const Vector& v1, const Vector& v2, bool ommitFirst);
 
 std::string vectorToString(const std::vector<double>& vector);
