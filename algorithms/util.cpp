@@ -101,9 +101,10 @@ void print4dist(Cluster data, const DistFunc& distFunc,
 		}
 		sort(distances.begin(), distances.end());
 		kdistances.push_back(distances[3]);
-		sprintf(progress, "\r%3.2f%%", (double)(i)/data.size()*100);
+		sprintf(progress, "\r%3.2f%%", (double)(i+1)/data.size()*100);
 		cout << progress;	
 	}
+	cout << endl;
 	sort(kdistances.begin(), kdistances.end());
 	double min = *(kdistances.begin());
 	double max = *(kdistances.end() - 1);
