@@ -10,6 +10,7 @@ namespace med {
 
 typedef std::vector<double> Vector;
 typedef std::vector<Vector> Cluster;
+// two vectors distance function
 typedef std::function<double(const Vector&, const Vector&, bool)> DistFunc;
 
 double euclideanDistance(const Vector& v1, const Vector& v2, bool ommitFirst);
